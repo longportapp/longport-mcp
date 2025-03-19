@@ -65,7 +65,7 @@ jobs:
           zip ${{ matrix.settings.target }}.zip target/${{ matrix.settings.target }}/release/${{ matrix.settings.bin }}${{ matrix.settings.bin_suffix }}
 
       - name: Archive artifact(Windows)
-        if: ${{ !contains(matrix.settings.target, 'windows') }}
+        if: ${{ contains(matrix.settings.target, 'windows') }}
         run: |
           Compress-Archive -Path target/${{ matrix.settings.target }}/release/${{ matrix.settings.bin }}${{ matrix.settings.bin_suffix }} -DestinationPath ${{ matrix.settings.target }}.zip
 
