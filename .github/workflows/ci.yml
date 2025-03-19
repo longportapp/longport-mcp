@@ -13,8 +13,20 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-22.04, windows-latest, macos-13]
-    runs-on: ${{ matrix.os }}
+        settings:
+          - host: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            cross: true
+          - host: ubuntu-22.04
+            target: aarch64-unknown-linux-gnu
+            cross: true
+          - host: windows-latest
+            target: x86_64-pc-windows-msvc
+          - host: macos-13
+            target: x86_64-apple-darwin
+          - host: macos-13
+            target: aarch64-apple-darwin
+    runs-on: ${{ matrix.settings.host }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -25,6 +37,18 @@ jobs:
           toolchain: stable
           override: true
           components: rustfmt, clippy
+          target: ${{ matrix.settings.target }}
 
       - name: Build
-        run: cargo build --release
+        if: ${{ !matrix.settings.cross }}
+        run: |
+          cargo build --release --target ${{ matrix.settings.target }}
+
+      - name: Install latest cross binary
+        if: ${{ matrix.settings.cross }}
+        uses: st3iny/install-cross-binary@v2
+
+      - name: Build with Cross
+        if: ${{ matrix.settings.cross }}
+        run: |
+          cross build --release --target ${{ matrix.settings.target }}
