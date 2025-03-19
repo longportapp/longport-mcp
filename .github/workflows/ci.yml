@@ -60,8 +60,14 @@ jobs:
           cross build --release --target ${{ matrix.settings.target }}
 
       - name: Archive artifact
+        if: ${{ !contains(matrix.settings.target, 'windows') }}
         run: |
           zip ${{ matrix.settings.target }}.zip target/${{ matrix.settings.target }}/release/${{ matrix.settings.bin }}${{ matrix.settings.bin_suffix }}
+
+      - name: Archive artifact(Windows)
+        if: ${{ !contains(matrix.settings.target, 'windows') }}
+        run: |
+          Compress-Archive -Path target/${{ matrix.settings.target }}/release/${{ matrix.settings.bin }}${{ matrix.settings.bin_suffix }} -DestinationPath ${{ matrix.settings.target }}.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
