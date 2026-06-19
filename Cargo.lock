@@ -1643,7 +1643,7 @@ dependencies = [
 
 [[package]]
 name = "longport-mcp"
-version = "0.5.8"
+version = "0.5.9"
 dependencies = [
  "anyhow",
  "axum",
