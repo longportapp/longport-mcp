@@ -111,10 +111,7 @@ fn is_text_file(path: &Path) -> bool {
     let Some(name) = path.file_name().and_then(|s| s.to_str()) else {
         return false;
     };
-    if matches!(
-        name,
-        "LICENSE" | "Makefile" | "README.md" | "LAUNCHGUIDE.md" | ".gitignore"
-    ) {
+    if matches!(name, "Makefile" | "README.md" | "LAUNCHGUIDE.md" | ".gitignore") {
         return true;
     }
 
